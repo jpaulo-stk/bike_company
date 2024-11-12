@@ -9,5 +9,5 @@ CREATE TABLE produtos (
     id_categoria INT NOT NULL,
     id_marca INT NOT NULL,
     FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria),
-    FOREIGN KEY (id_marca) REFERENCES marcas(id_marca)
+    FOREIGN KEY (id_marca) REFERENCES marca(id_marca)
 );
