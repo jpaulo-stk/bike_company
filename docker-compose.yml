@@ -4,12 +4,11 @@ services:
   mysql:
     build:
       context: .
-    container_name: mysql_bikecompany
+    container_name: ebike
     environment:
-      MYSQL_ROOT_PASSWORD: 123
-      MYSQL_DATABASE: Bike_Company
-      MYSQL_USER: lero
-      MYSQL_PASSWORD: 123
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_USER: root
+      MYSQL_PASSWORD:
     ports:
       - "3060:3306"
     volumes:

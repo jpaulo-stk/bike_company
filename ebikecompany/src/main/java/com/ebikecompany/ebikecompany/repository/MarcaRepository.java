@@ -1,4 +1,7 @@
 package com.ebikecompany.ebikecompany.repository;
 
-public class MarcaRepository {
+import com.ebikecompany.ebikecompany.models.MarcaEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MarcaRepository extends JpaRepository<MarcaEntity, Integer> {
 }

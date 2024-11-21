@@ -1,4 +1,7 @@
 package com.ebikecompany.ebikecompany.repository;
 
-public class ProdutosRepository {
+import com.ebikecompany.ebikecompany.models.ProdutosEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProdutosRepository extends JpaRepository<ProdutosEntity, Integer> {
 }

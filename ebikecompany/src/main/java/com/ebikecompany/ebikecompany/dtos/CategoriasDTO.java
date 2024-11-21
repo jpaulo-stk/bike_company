@@ -1,4 +1,4 @@
 package com.ebikecompany.ebikecompany.dtos;
 
-public interface CategoriasDTO {
+public record CategoriasDTO(String nome) {
 }

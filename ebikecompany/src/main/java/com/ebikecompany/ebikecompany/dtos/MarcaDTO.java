@@ -1,4 +1,4 @@
 package com.ebikecompany.ebikecompany.dtos;
 
-public interface MarcaDTO {
+public record MarcaDTO(String nome) {
 }
