@@ -1,6 +1,11 @@
 CREATE TABLE vendas (
-    id_venda INT PRIMARY KEY AUTO_INCREMENT,
-    data DATE
+  id_venda int NOT NULL AUTO_INCREMENT,
+  data date DEFAULT NULL,
+  id_user int NOT NULL,
+  valor_total int NOT NULL,
+  PRIMARY KEY (id_venda),
+  KEY id_user (id_user),
+  CONSTRAINT vendas_ibfk_1 FOREIGN KEY (id_user) REFERENCES user (id)
 );
 
 CREATE TABLE itens_vendas (
