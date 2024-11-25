@@ -27,8 +27,8 @@ public class CategoriasController implements  useCase  {
 
     @GetMapping
     public ResponseEntity<List<CategoriasEntity>> findall() {
-        List<CategoriasEntity> categorias = this.categoriasRepository.findAll();
-        return  ResponseEntity.ok(categorias);
+        List<CategoriasEntity> categoriass = this.categoriasRepository.findAll();
+        return  ResponseEntity.ok(categoriass);
     }
 
     @GetMapping("/{id}")
