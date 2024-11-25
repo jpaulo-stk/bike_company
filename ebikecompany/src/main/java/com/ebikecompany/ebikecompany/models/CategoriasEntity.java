@@ -1,5 +1,6 @@
 package com.ebikecompany.ebikecompany.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -9,20 +10,19 @@ public class CategoriasEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_categoria")
     private Integer id_categoria;
 
     @Column(name = "nome", length = 200)
     private String nome;
 
-    @OneToMany(mappedBy = "categoria")
+    @OneToMany(mappedBy = "categorias", cascade = CascadeType.ALL)
     private List<ProdutosEntity> produtos;
 
-    public Integer getId() {
+    public Integer getId_categoria() {
         return id_categoria;
     }
 
-    public void setId(Integer id_categoria) {
+    public void setId_categoria(Integer id_categoria) {
         this.id_categoria = id_categoria;
     }
 

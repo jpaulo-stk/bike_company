@@ -1,6 +1,8 @@
 package com.ebikecompany.ebikecompany.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 import java.io.Serializable;
@@ -9,9 +11,12 @@ import java.io.Serializable;
 public class CategoriaProdutoPK implements Serializable {
 
     @ManyToOne
+    @JoinColumn(name = "id_produto", referencedColumnName = "id_produto")
+    @JsonIgnoreProperties("categorias")
     private ProdutosEntity id_produto;
 
     @ManyToOne
+    @JoinColumn(name = "id_categoria", referencedColumnName = "id_categoria")
     private CategoriasEntity id_categoria;
 
     public ProdutosEntity getId_produto() {
@@ -28,18 +33,5 @@ public class CategoriaProdutoPK implements Serializable {
 
     public void setId_categoria(CategoriasEntity id_categoria) {
         this.id_categoria = id_categoria;
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * id_produto.hashCode() + id_categoria.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        CategoriaProdutoPK that = (CategoriaProdutoPK) obj;
-        return id_produto.equals(that.id_produto) && id_categoria.equals(that.id_categoria);
     }
 }

@@ -1,5 +1,6 @@
 package com.ebikecompany.ebikecompany.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -8,14 +9,13 @@ public class ProdutosEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_produto")
     private Integer id_produto;
 
     @Column(name = "nome")
     private String nome;
 
-    @Column(name = "desc")
-    private String desc;
+    @Column(name = "descricao")
+    private String descricao;
 
     @Column(name = "valor")
     private Double valor;
@@ -23,19 +23,27 @@ public class ProdutosEntity {
     @Column(name = "quantidade")
     private Integer quantidade;
 
-    @Column(name = "card_image")
-    private String card_image;
-
     @Column(name = "tamanho")
     private String tamanho;
 
     @ManyToOne
-    @JoinColumn(name = "id_categoria", referencedColumnName = "id_categoria")
-    private CategoriasEntity categoria;
+    @JoinColumn(name = "id_marca", referencedColumnName = "id_marca")
+    @JsonIgnoreProperties({"produtos"})
+    private MarcaEntity marca;
+
 
     @ManyToOne
-    @JoinColumn(name = "id_marca", referencedColumnName = "id_marca")
-    private MarcaEntity marca;
+    @JoinColumn(name = "id_categoria", referencedColumnName = "id_categoria")
+    @JsonIgnoreProperties({"produtos"})
+    private CategoriasEntity categorias;
+
+    public CategoriasEntity getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(CategoriasEntity categorias) {
+        this.categorias = categorias;
+    }
 
     public Integer getId_produto() {
         return id_produto;
@@ -53,12 +61,12 @@ public class ProdutosEntity {
         this.nome = nome;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public Double getValor() {
@@ -77,28 +85,12 @@ public class ProdutosEntity {
         this.quantidade = quantidade;
     }
 
-    public String getCard_image() {
-        return card_image;
-    }
-
-    public void setCard_image(String card_image) {
-        this.card_image = card_image;
-    }
-
     public String getTamanho() {
         return tamanho;
     }
 
     public void setTamanho(String tamanho) {
         this.tamanho = tamanho;
-    }
-
-    public CategoriasEntity getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(CategoriasEntity categoria) {
-        this.categoria = categoria;
     }
 
     public MarcaEntity getMarca() {
@@ -108,4 +100,6 @@ public class ProdutosEntity {
     public void setMarca(MarcaEntity marca) {
         this.marca = marca;
     }
+
+
 }
