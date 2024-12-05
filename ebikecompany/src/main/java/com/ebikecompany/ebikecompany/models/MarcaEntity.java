@@ -42,4 +42,7 @@ public class MarcaEntity {
         this.nome = nome;
     }
 
+    public MarcaEntity() {
+    }
+
 }
