@@ -3,6 +3,7 @@ package com.ebikecompany.ebikecompany.controllers;
 import com.ebikecompany.ebikecompany.dtos.ProdutosDTO;
 import com.ebikecompany.ebikecompany.models.ProdutosEntity;
 import com.ebikecompany.ebikecompany.repository.ProdutosRepository;
+import com.ebikecompany.ebikecompany.service.ProdutosServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,65 +17,32 @@ public class ProdutosController {
     @Autowired
     private ProdutosRepository repository;
 
+    @Autowired
+    private ProdutosServices produtosServices;
+
     @GetMapping
     public ResponseEntity<List<ProdutosEntity>> findAll() {
-        List<ProdutosEntity> produtos = this.repository.findAll();
-        return ResponseEntity.ok(produtos);
+        return this.produtosServices.pegarTodosProdutos();
     }
 
     @GetMapping("/{id}")
     public ProdutosEntity findById(@PathVariable Integer id) {
-        return this.repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Produto não foi encontrado"));
+      return  this.produtosServices.lerPorId(id);
     }
 
     @PostMapping
     public ResponseEntity<ProdutosEntity> save(@RequestBody ProdutosDTO dto) {
-        if (dto.nome().isEmpty()) {
-            return  ResponseEntity.status(428).build();
-        }
-
-        ProdutosEntity produto = new ProdutosEntity();
-        produto.setNome(dto.nome());
-        produto.setDescricao(dto.descricao());
-        produto.setValor(dto.valor());
-        produto.setQuantidade(dto.quantidade());
-        produto.setTamanho(dto.tamanho());
-        produto.setMarca(dto.marca());
-        produto.setCategorias(dto.categorias());
-
-        this.repository.save(produto);
-        return ResponseEntity.ok(produto);
+      return this.produtosServices.criarProduto(dto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        ProdutosEntity produto = this.repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
-
-        this.repository.delete(produto);
+        this.produtosServices.deletarProduto(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProdutosEntity> update(@PathVariable Integer id, @RequestBody ProdutosDTO dto) {
-        if (dto.nome().isEmpty()) {
-            return ResponseEntity.status(428).build();
-        }
-
-        ProdutosEntity produto = this.repository.findById(id)
-                .orElseThrow(() ->
-                        new IllegalArgumentException("Produto não foir encontrado"));
-
-        produto.setNome(dto.nome());
-        produto.setDescricao(dto.descricao());
-        produto.setValor(dto.valor());
-        produto.setQuantidade(dto.quantidade());
-        produto.setTamanho(dto.tamanho());
-        produto.setMarca(dto.marca());
-        produto.setCategorias(dto.categorias());
-
-        this.repository.save(produto);
-        return ResponseEntity.ok(produto);
+      return  this.produtosServices.atualizarProduto(id,dto);
     }
 }

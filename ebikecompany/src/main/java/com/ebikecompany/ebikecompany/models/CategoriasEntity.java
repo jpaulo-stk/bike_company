@@ -1,12 +1,11 @@
 package com.ebikecompany.ebikecompany.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "categorias")
-public class CategoriasEntity {
+public class CategoriasEntity  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,4 +40,6 @@ public class CategoriasEntity {
     public void setProdutos(List<ProdutosEntity> produtos) {
         this.produtos = produtos;
     }
+
+
 }
