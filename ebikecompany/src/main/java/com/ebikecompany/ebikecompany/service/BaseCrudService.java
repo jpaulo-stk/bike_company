@@ -8,9 +8,7 @@ import java.util.Optional;
 
 public abstract class BaseCrudService<T> {
 
-
     protected abstract JpaRepository<T, Integer> getRepository();
-
 
     public T criar(T entity) {
         return getRepository().save(entity);
@@ -21,11 +19,9 @@ public abstract class BaseCrudService<T> {
                 .orElseThrow(() -> new IllegalArgumentException("Entidade não encontrada."));
     }
 
-
     public List<T> lerTodos() {
         return getRepository().findAll();
     }
-
 
     public void deletar(Integer id) {
         T entity = lerPorId(id);

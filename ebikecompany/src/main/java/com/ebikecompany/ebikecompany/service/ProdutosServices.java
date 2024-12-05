@@ -1,22 +1,36 @@
 package com.ebikecompany.ebikecompany.service;
 
+import com.ebikecompany.ebikecompany.Errors.ErrorValidate;
 import com.ebikecompany.ebikecompany.dtos.ProdutosDTO;
 import com.ebikecompany.ebikecompany.models.CategoriasEntity;
 import com.ebikecompany.ebikecompany.models.ProdutosEntity;
+import com.ebikecompany.ebikecompany.repository.MarcaRepository;
 import com.ebikecompany.ebikecompany.repository.ProdutosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+interface IProdutosService {
+    List<ProdutosEntity> pegarTodosProdutos();
+    ProdutosEntity pegarProdutoPeloId(Integer id);
+    ProdutosEntity criarProduto(ProdutosDTO produtosDTO);
+    void deletarProduto(Integer id);
+    ProdutosEntity atualizarProduto(Integer id, ProdutosDTO dto);
+}
+
 @Service
-public class ProdutosServices extends BaseCrudService<ProdutosEntity> {
+public class ProdutosServices extends BaseCrudService<ProdutosEntity> implements IProdutosService{
 
     @Autowired
-   private ProdutosRepository produtosRepository;
+    private CategoriasService categoriasService;
+
+    @Autowired
+    private MarcaRepository marcaRepository;
+
+    @Autowired
+     private ProdutosRepository produtosRepository;
 
     @Autowired
     private ValidationService validationService;
@@ -26,18 +40,20 @@ public class ProdutosServices extends BaseCrudService<ProdutosEntity> {
         return  produtosRepository;
     }
 
-    public ResponseEntity<List<ProdutosEntity>> pegarTodosProdutos () {
-        List<ProdutosEntity> produtos = lerTodos();
-        return ResponseEntity.ok(produtos);
+    public List<ProdutosEntity> pegarTodosProdutos () {
+        return lerTodos();
     }
-    public ResponseEntity<ProdutosEntity>  pegarProdutoPeloId(Integer id) {
-        ProdutosEntity produtos = lerPorId(id);
-        return ResponseEntity.ok(produtos);
+    public ProdutosEntity  pegarProdutoPeloId(Integer id) {
+
+        return  lerPorId(id);
     }
 
-    public ResponseEntity<ProdutosEntity> criarProduto(ProdutosDTO produtosDTO) {
+
+    public ProdutosEntity criarProduto(ProdutosDTO produtosDTO) {
         Boolean name = this.validationService.validation(produtosDTO.nome());
-        if (!name)   return ResponseEntity.status(428).build();
+        if(!name) throw  new ErrorValidate("nome precisar de mais que 5 caracteres");
+        CategoriasEntity categoriasEntity = this.categoriasService.lerCategoriasPorId(produtosDTO.categorias().getId_categoria());
+
         ProdutosEntity produtos = new ProdutosEntity();
         produtos.setNome(produtosDTO.nome());
         produtos.setDescricao(produtosDTO.descricao());
@@ -47,16 +63,18 @@ public class ProdutosServices extends BaseCrudService<ProdutosEntity> {
         produtos.setMarca(produtosDTO.marca());
         produtos.setCategorias(produtosDTO.categorias());
         criar(produtos);
-        return  ResponseEntity.ok(produtos);
+        return  produtos;
     }
+
     public void deletarProduto (Integer id) {
             deletar(id);
     }
 
-    public ResponseEntity<ProdutosEntity> atualizarProduto (Integer id, ProdutosDTO dto) {
+    public ProdutosEntity atualizarProduto (Integer id, ProdutosDTO dto) {
         ProdutosEntity produto = lerPorId(id);
         Boolean validate = this.validationService.validation(dto.nome());
-        if (!validate)  return ResponseEntity.status(428).build();
+        CategoriasEntity categoriasEntity = this.categoriasService.lerCategoriasPorId(id);
+        if (!validate) throw  new ErrorValidate("nome precisa ter mais que 3 caracteres");
         produto.setNome(dto.nome());
         produto.setDescricao(dto.descricao());
         produto.setValor(dto.valor());
@@ -66,31 +84,6 @@ public class ProdutosServices extends BaseCrudService<ProdutosEntity> {
         produto.setCategorias(dto.categorias());
 
         criar(produto);
-        return ResponseEntity.ok(produto);
+        return produto;
     }
-//
-//    @PutMapping("/{id}")
-//    public ResponseEntity<ProdutosEntity> update(@PathVariable Integer id, @RequestBody ProdutosDTO dto) {
-//        if (dto.nome().isEmpty()) {
-//            return ResponseEntity.status(428).build();
-//        }
-//
-//        ProdutosEntity produto = this.repository.findById(id)
-//                .orElseThrow(() ->
-//                        new IllegalArgumentException("Produto não foir encontrado"));
-//
-//        produto.setNome(dto.nome());
-//        produto.setDescricao(dto.descricao());
-//        produto.setValor(dto.valor());
-//        produto.setQuantidade(dto.quantidade());
-//        produto.setTamanho(dto.tamanho());
-//        produto.setMarca(dto.marca());
-//        produto.setCategorias(dto.categorias());
-//
-//        this.repository.save(produto);
-//        return ResponseEntity.ok(produto);
-//    }
-
-
-
 }
